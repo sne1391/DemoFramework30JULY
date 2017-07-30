@@ -5,6 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 public class LoginPage {
 
@@ -15,7 +18,7 @@ public class LoginPage {
 		this.driver = dri;
 	}
 	
-	@FindBy(how=How.ID,using=".//*[@id='account_sign_in_form_email_id']")
+	@FindBy(how=How.NAME,using="email")
 	@CacheLookup
 	WebElement userName;
 	
@@ -23,13 +26,22 @@ public class LoginPage {
 	@CacheLookup
 	WebElement passwd;
 	
-	public void enterUsername(String usrName)
+	@FindBy(how=How.XPATH,using="//h2[text()='Account Dashboard View']")
+	@CacheLookup
+	WebElement dashboard;
+	
+	public void loginApp(String usrName, String pwd)
 	{
 		userName.sendKeys(usrName);
+		passwd.sendKeys(pwd);
 	}
 	
-	public void enterPasswd(String pwd){
-		passwd.sendKeys(pwd);
+	public String getDashboardTitle()
+	{
+		WebDriverWait wait = new WebDriverWait(driver, 20);
+		WebElement ele = wait.until(ExpectedConditions.visibilityOf(dashboard));
+		String dashboardTitle = ele.getText();
+		return dashboardTitle;
 	}
 	
 }
